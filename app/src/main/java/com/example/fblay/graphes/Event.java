@@ -91,7 +91,6 @@ public class Event {
 
 
     public void dialog() {
-        Log.e("dialog", "dialog");
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.dialogue_name, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
