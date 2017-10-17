@@ -1,6 +1,7 @@
 package com.example.fblay.graphes;
 
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -32,14 +33,21 @@ public class Arc {
     public void setArc(Dot d1, Dot d2) {
         this.from = d1;
         this.to = d2;
-        path.reset();
-        path.moveTo(d1.getX(), d1.getY());
-        //path.rQuadTo(d1.getX(), d1.getY(), d2.getX(), d2.getY());
-        path.quadTo(d2.getX(), d1.getY(), d2.getX(), d2.getY());
-        PathMeasure pm = new PathMeasure(path, true);
-        Float f = pm.getLength();
-        Log.e("zfefe", ""+f);
-        drawArrow(d2.getX(), d2.getY());
+        if(d1.equals(d2)) {
+            path.reset();
+            path.moveTo(from.getX(), from.getY());
+            path.addCircle(from.getX() + 80, from.getY(), 50, Path.Direction.CCW);
+            path.close();
+        } else {
+            path.reset();
+            path.moveTo(d1.getX(), d1.getY());
+            //path.rQuadTo(d1.getX(), d1.getY(), d2.getX(), d2.getY());
+            path.quadTo(d2.getX(), d1.getY(), d2.getX(), d2.getY());
+            PathMeasure pm = new PathMeasure(path, true);
+            Float f = pm.getLength();
+            drawArrow(d2.getX(), d2.getY());
+        }
+
     }
 
     private void drawArrow(float x, float y) {
@@ -49,10 +57,6 @@ public class Arc {
         path.lineTo(x - 40f, y - 60f);
         path.lineTo(x - 40f, y - 40f);
         path.close();
-        Matrix mMatrix = new Matrix();
-        RectF bounds = new RectF();
-        path.computeBounds(bounds, true);
-        mMatrix.postRotate(90, bounds.centerX(), bounds.centerY());
     }
     public void draw(Dot d1, float endX, float endY) {
         path.reset();
@@ -61,9 +65,16 @@ public class Arc {
     }
 
     public void move(){
-        path.reset();
-        path.moveTo(from.getX(), from.getY());
-        path.quadTo(from.getX(), to.getY(), to.getX() , to.getY());
+        if(from.equals(to)) {
+            path.reset();
+            path.moveTo(from.getX(), from.getY());
+            path.addCircle(from.getX() + 80, from.getY(), 50, Path.Direction.CCW);
+            path.close();
+        } else {
+            path.reset();
+            path.moveTo(from.getX(), from.getY());
+            path.quadTo(from.getX(), to.getY(), to.getX() , to.getY());
+        }
     }
 
     public Path getPath() {
