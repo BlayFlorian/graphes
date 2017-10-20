@@ -1,5 +1,6 @@
 package com.example.fblay.graphes;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
@@ -13,11 +14,16 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
-
+    private DrawableGraph graph;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        graph = (DrawableGraph) findViewById(R.id.signature_canvas);
+    }
+
+    public void clearCanvas(View v) {
+        graph.clearCanvas();
     }
 
     @Override

@@ -24,8 +24,6 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
     DotList dotList;
 	AttributeSet attrs;
 
-    int onDot;
-    boolean onMove;
     int longClick;
 
 	private Paint mPaint;
@@ -119,5 +117,9 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
         longClick = e.checkLongClick();
         return true;
     }
+
+    public void clearCanvas() {
+		Log.e("clear", "clear");
+	}
 
 }
