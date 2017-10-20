@@ -1,5 +1,6 @@
 package com.example.fblay.graphes;
 
+import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -96,19 +97,15 @@ public class Event {
         dotList.getDot(middle[0]).getArcList().getArc(middle[1]).moveMiddle(eventX, eventY);
     }
 
+    @SuppressLint("InflateParams") //C'est l'exception donc pas de Warning Linter
     public void dialog() {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.dialogue_name, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
-
-        // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
-
         final EditText userInput = (EditText) promptsView
                 .findViewById(R.id.edit1);
-
-        // set dialog message
         alertDialogBuilder
                 .setCancelable(false)
                 .setPositiveButton("OK",
@@ -127,9 +124,7 @@ public class Event {
                                 dialog.cancel();
                             }
                         });
-        // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
-        // show it
         alertDialog.show();
     }
 
