@@ -18,6 +18,7 @@ import android.widget.EditText;
 public class Event {
     float eventX, eventY, startX, startY;
     int nodeIndex;
+    int[] middle;
     DotList dotList;
     Integer TOLERANCE = 5;
     Context context;
@@ -64,17 +65,20 @@ public class Event {
         }
     }
 
-    public boolean checkLongClick() {
+    public int checkLongClick() {
         if(startY <= eventY + 25 && startY >= eventY - 25
                 && startX <= eventX + 25 && startX >= eventX - 25) {
+            middle = dotList.searchMiddle(startX, startY);
             if (this.nodeIndex >= 0) {
-                return true;
+                return 1;
+            } else if(middle[0] >= 0){
+                return 2;
             }
             else {
                 dialog();
             }
         }
-        return false;
+        return -1;
     }
 
     public void moveNode(){
@@ -88,7 +92,9 @@ public class Event {
             }
         }
     }
-
+    public void moveMiddle() {
+        dotList.getDot(middle[0]).getArcList().getArc(middle[1]).moveMiddle(eventX, eventY);
+    }
 
     public void dialog() {
         LayoutInflater li = LayoutInflater.from(context);

@@ -92,6 +92,15 @@ public class Arc {
         }
     }
 
+    public void moveMiddle(float x, float y) {
+        path.reset();
+        path.moveTo(from.getX(), from.getY());
+        path.quadTo(x, y, to.getX(), to.getY());
+        position = getMiddleArc();
+        path.moveTo(position[0], position[1]);
+        setRectF(position[0], position[1]);
+    }
+
     public Path getPath() {
         return this.path;
     }
@@ -110,6 +119,10 @@ public class Arc {
 
     public Dot getTo() {
         return to;
+    }
+
+    public float[] getPosition () {
+        return position;
     }
 
 
