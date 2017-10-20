@@ -75,6 +75,7 @@ class Dot extends View {
     public String getText() {
         return this.text;
     }
+
     public void setText(String t) {
         this.text = t;
     }
@@ -82,5 +83,6 @@ class Dot extends View {
     public ArcList getArcList(){
         return arcList;
     }
+
 
 }
