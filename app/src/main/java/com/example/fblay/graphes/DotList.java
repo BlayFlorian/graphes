@@ -59,6 +59,16 @@ public class DotList {
         return -1;
     }
 
+    public int[] searchMiddle(float x, float y) {
+        for (int i = 0; i < l.size(); i++) {
+            int res = l.get(i).getArcList().getMiddle(x,y);
+            if(res != -1) {
+                return new int[] {i,res};
+            }
+        }
+        return new int[]{-1,-1};
+    }
+
     public Dot getDot(int index){
         return l.get(index);
     }

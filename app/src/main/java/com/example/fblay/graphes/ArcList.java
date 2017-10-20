@@ -35,5 +35,16 @@ public class ArcList {
         arrayArc.add(new Arc());
     }
 
+    public int getMiddle(float x, float y) {
+        for (int i = 0; i < arrayArc.size() - 1; i++) {
+            float[] position = arrayArc.get(i).getPosition();
+            if (position[0] < x + 50 && position[0] > x -50) {
+                if (position[1] < y + 50 && position[1] > y - 50) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
 
 }

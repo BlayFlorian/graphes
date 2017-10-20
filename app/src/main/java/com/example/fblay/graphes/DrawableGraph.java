@@ -26,7 +26,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 
     int onDot;
     boolean onMove;
-    boolean longClick;
+    int longClick;
 
 	private Paint mPaint;
 
@@ -72,6 +72,9 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
             for(int y = 0; y < arcL.getSize(); y++) {
                 if(arcL.getIndex(y) != null) {
                     canvas.drawPath(arcL.getIndex(y), mPaint);
+					if(arcL.getArc(y).rectF != null) {
+						arcL.getArc(y).drawRect(canvas);
+					}
                 }
             }
         }
@@ -90,19 +93,21 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 			break;
 		//Des que tu bouge ton doigt
 		case MotionEvent.ACTION_MOVE:
-		    if(longClick) {
+		    if(longClick == 1) {
                 e.moveNode();
-            } else {
+            } else if (longClick == 2){
+				e.moveMiddle();
+			}else {
                 e.moveTouch();
             }
             invalidate();
 			break;
 		//des que tu retire ton doigt
 		case MotionEvent.ACTION_UP:
-		    if(!longClick) {
+		    if(longClick == -1) {
                 e.upTouch();
             }
-            longClick = false;
+            longClick = -1;
 			invalidate();
 			break;
 		}
