@@ -2,6 +2,7 @@ package com.example.fblay.graphes;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -65,10 +66,6 @@ public class Arc {
         path.lineTo(x - 40f, y - 70f);
         path.lineTo(x - 40f, y - 40f);
         path.close();
-        Matrix mMatrix = new Matrix();
-        RectF bounds = new RectF();
-        path.computeBounds(bounds, true);
-        mMatrix.postRotate(90, bounds.centerX(), bounds.centerY());
     }
     public void draw(Dot d1, float endX, float endY) {
         path.reset();
@@ -86,6 +83,7 @@ public class Arc {
             path.reset();
             path.moveTo(from.getX(), from.getY());
             path.quadTo(from.getX(), to.getY(), to.getX() , to.getY());
+        }
             position = getMiddleArc();
             path.moveTo(position[0], position[1]);
             setRectF(position[0], position[1]);
@@ -98,7 +96,6 @@ public class Arc {
         path.quadTo(x, y, to.getX(), to.getY());
         position = getMiddleArc();
         path.moveTo(position[0], position[1]);
-        setRectF(position[0], position[1]);
     }
 
     public Path getPath() {
