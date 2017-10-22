@@ -100,5 +100,8 @@ public class DotList {
             }
         return dl;
     }
+    public void supDot(int index){
+        l.remove(index);
+    }
 
 }

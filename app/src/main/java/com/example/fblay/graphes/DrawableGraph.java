@@ -23,6 +23,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
     ArrayList<Dot> l;
     DotList dotList;
 	AttributeSet attrs;
+    int mode = -1;
 
     int longClick;
 
@@ -34,16 +35,13 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 		super(c, attrs);
 		context = c;
 		this.attrs = attrs;
-		//PM
         setLongClickable(true);
         setOnLongClickListener(this);
-		//Nouveau list de Node
         dotList = new DotList(context, attrs);
-		//Nouvel evenement
         e = new Event(dotList, context, attrs);
 
 		backgroundPaint = new Paint();
-		backgroundPaint.setColor(Color.BLUE);
+		backgroundPaint.setColor(Color.CYAN);
 		// and we set a new DrawGraph with the desired attributes
 
 	}
@@ -52,7 +50,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		//taille canvas
+        Log.e("", ""+mode);
 		int width = canvas.getWidth();
 		int height = canvas.getHeight();
 		canvas.drawRect(0, 0, width, height, backgroundPaint);
@@ -83,6 +81,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 	public boolean onTouchEvent(MotionEvent event) {
 		e.eventX = event.getX();
 		e.eventY = event.getY();
+		e.mode = mode;
 		switch (event.getAction()) {
 			//Quand tu pose ton doigt
 		case MotionEvent.ACTION_DOWN:
@@ -91,20 +90,22 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 			break;
 		//Des que tu bouge ton doigt
 		case MotionEvent.ACTION_MOVE:
-		    if(longClick == 1) {
+		    if(longClick == 1 && mode == 2) {
                 e.moveNode();
-            } else if (longClick == 2){
+            } else if (longClick == 2 && mode == 2){
 				e.moveMiddle();
-			}else {
+			}else if (mode == 1) {
                 e.moveTouch();
             }
             invalidate();
 			break;
 		//des que tu retire ton doigt
 		case MotionEvent.ACTION_UP:
-		    if(longClick == -1) {
+		    if(longClick == -1 && mode == 1) {
                 e.upTouch();
-            }
+            } else if(longClick == 1 && mode == 0) {
+				e.menuNode();
+			}
             longClick = -1;
 			invalidate();
 			break;

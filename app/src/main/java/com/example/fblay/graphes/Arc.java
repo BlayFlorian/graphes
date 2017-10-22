@@ -78,18 +78,11 @@ public class Arc {
 
     public void move(){
         path.reset();
-        if(from.equals(to)) {
-            path.moveTo(from.getX(), from.getY());
-            path.addCircle(from.getX() + 80, from.getY(), 50, Path.Direction.CCW);
-            path.close();
-        } else {
-            path.reset();
-            path.moveTo(from.getX(), from.getY());
-            path.quadTo(from.getX(), to.getY(), to.getX() , to.getY());
-            position = getMiddleArc();
-            path.moveTo(position[0], position[1]);
-            setRectF(position[0], position[1]);
-        }
+        path.moveTo(from.getX(), from.getY());
+        path.quadTo(from.getX(), to.getY(), to.getX() , to.getY());
+        position = getMiddleArc();
+        path.moveTo(position[0], position[1]);
+        setRectF(position[0], position[1]);
     }
 
     public void moveMiddle(float x, float y) {

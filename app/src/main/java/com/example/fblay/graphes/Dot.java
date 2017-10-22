@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 class Dot extends View {
-    private static final float RADIUS = 50;
+    private float RADIUS = 50;
     private Paint circle;
     private Paint textPaint;
 
@@ -61,6 +61,25 @@ class Dot extends View {
         this.y = ny;
     }
 
+    public void setColor(int c) {
+        switch (c) {
+            case 0: circle.setColor(Color.RED);
+                break;
+            case 1: circle.setColor(Color.GREEN);
+                break;
+            case 2: circle.setColor(Color.BLUE);
+                break;
+            case 3: circle.setColor(Color.YELLOW);
+                break;
+            case 4: circle.setColor(Color.CYAN);
+                break;
+            case 5: circle.setColor(Color.MAGENTA);
+                break;
+            default: circle.setColor(Color.BLACK);
+                break;
+        }
+    }
+
 
     public float getX(){
         return this.x;
@@ -71,6 +90,10 @@ class Dot extends View {
     }
 
     public float getRadius() { return RADIUS; }
+
+    public void setRadius(int i) {
+        RADIUS = i;
+    }
 
     public String getText() {
         return this.text;
