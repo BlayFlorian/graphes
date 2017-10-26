@@ -165,8 +165,8 @@ public class Event {
     }
 
     public void menuNode(){
-        CharSequence choice[] = new CharSequence[] {"Modifier text", "Modifier taille", "Modifier couleur", "Supprimer Noeud"};
-
+        CharSequence choice[] = new CharSequence[]
+                {"Modifier text", "Modifier taille", "Modifier couleur", "Supprimer Noeud"};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Menu Noeud");
         builder.setItems(choice, new DialogInterface.OnClickListener() {
@@ -180,6 +180,28 @@ public class Event {
                     colorPickerDialog();
                 } else if(which == 3) {
                     supNode();
+                }
+            }
+        });
+        builder.show();
+    }
+    public void menuArc(){
+        CharSequence choice[] = new CharSequence[]
+                {"Supprimer arc", "Modifier étiquette", "Modifier couleur", "Modifier épaisseur Arc",
+                        "Modifier taille étiquette"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Menu Noeud");
+        builder.setItems(choice, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0){
+                    //
+                } else if(which == 1) {
+                    //
+                } else if(which == 2) {
+                    //
+                } else if(which == 3) {
+                    //
                 }
             }
         });

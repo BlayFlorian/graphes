@@ -86,11 +86,15 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
             invalidate();
 			break;
 		case MotionEvent.ACTION_UP:
+		    Log.e("mode", ""+mode);
 		    if(longClick == -1 && mode == 1) {
                 e.upTouch();
             } else if(longClick == 1 && mode == 0) {
 				e.menuNode();
-			}
+			} else if(longClick == 2 && mode == 1) {
+                Log.e("ici", "ici");
+                e.menuArc();
+            }
             longClick = -1;
 			invalidate();
 			break;
