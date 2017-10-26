@@ -20,24 +20,27 @@ import android.widget.NumberPicker;
  */
 
 public class Event {
-    float eventX, eventY, startX, startY;
+    private float eventX, eventY, startX, startY;
     int nodeIndex;
     int[] middle;
     DotList dotList;
-    Integer TOLERANCE = 5;
-    int mode;
     Context context;
     AttributeSet attrs;
     DrawableGraph thisDG;
     ArcList arcList;
 
-    public Event(DotList dList, Context context, AttributeSet attrs, DrawableGraph thisDG) {
-        this.context = context;
-        this.attrs = attrs;
+    public Event(DrawableGraph thisDG) {
+        this.thisDG = thisDG;
+        this.context = thisDG.context;
+        this.attrs = thisDG.attrs;
+        this.dotList = thisDG.dotList;
         this.eventX = 0;
         this.eventY = 0;
-        this.dotList = dList;
-        this.thisDG = thisDG;
+    }
+
+    public void setEvent(float x, float y) {
+        this.eventX = x;
+        this.eventY = y;
     }
     // when ACTION_DOWN start touch according to the x,y values
     public void startTouch() {
@@ -79,32 +82,14 @@ public class Event {
                 return 1;
             } else if(middle[0] >= 0){
                 return 2;
-            } else if (mode == 0){
+            } else if (thisDG.mode == 0){
                 textDialog(0);
             }
         }
         return -1;
     }
 
-    public void moveNode(){
-        dotList.getDot(nodeIndex).setY((int) eventY);
-        dotList.getDot(nodeIndex).setX((int) eventX);
-        DotList dl = dotList.containsDot(dotList.getDot(nodeIndex));
-        for(int i = 0; i < dl.getSize(); i++ ) {
-            ArcList arcList = dl.getDot(i).getArcList();
-            for (int y = 0; y < arcList.getSize() - 1; y++) {
-                arcList.getArc(y).move();
-            }
-        }
-    }
-    public void moveMiddle() {
-        dotList.getDot(middle[0]).getArcList().getArc(middle[1]).moveMiddle(eventX, eventY);
-    }
-
-
-    //LES DIALOGUES
-    //0 = ajout noeud
-    //1 = modification Text noeud
+    //======================LES DIALOGUES=================================//
     @SuppressLint("InflateParams") //C'est l'exception donc pas de Warning Linter
     public void textDialog(final int arg) {
         LayoutInflater li = LayoutInflater.from(context);
@@ -136,28 +121,7 @@ public class Event {
         alertDialog.show();
     }
 
-    public void menuNode(){
-        CharSequence choice[] = new CharSequence[] {"Modifier text", "Modifier taille", "Modifier couleur", "Supprimer Noeud"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Menu Noeud");
-        builder.setItems(choice, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(which == 0){
-                    textDialog(1);
-                } else if(which == 1) {
-                    show();
-                } else if(which == 2) {
-                    colorPicker();
-                } else if(which == 2) {
-                    supNode();
-                }
-            }
-        });
-        builder.show();
-    }
-    public void colorPicker(){
+    public void colorPickerDialog(){
         CharSequence choice[] = new CharSequence[] {"Rouge", "Vert", "Bleu", "Orange", "Cyan", "Magenta", "Noir"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -165,14 +129,14 @@ public class Event {
         builder.setItems(choice, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.e("color", which+"");
                 dotList.getDot(nodeIndex).setColor(which);
+                thisDG.invalidate();
             }
         });
         builder.show();
     }
 
-    public void show()
+    public void numberDialg()
     {
         LayoutInflater li = LayoutInflater.from(context);
         AlertDialog.Builder d = new AlertDialog.Builder(
@@ -198,8 +162,28 @@ public class Event {
                         }
                     });
         d.show();
+    }
 
+    public void menuNode(){
+        CharSequence choice[] = new CharSequence[] {"Modifier text", "Modifier taille", "Modifier couleur", "Supprimer Noeud"};
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Menu Noeud");
+        builder.setItems(choice, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0){
+                    textDialog(1);
+                } else if(which == 1) {
+                    numberDialg();
+                } else if(which == 2) {
+                    colorPickerDialog();
+                } else if(which == 2) {
+                    supNode();
+                }
+            }
+        });
+        builder.show();
     }
 
     public void newNode(String text){
@@ -208,10 +192,12 @@ public class Event {
         d.setX((int)eventX);
         d.setY((int)eventY);
         dotList.putDot(d);
+        thisDG.invalidate();
     }
 
     public void setTextNode(String text) {
         dotList.getDot(nodeIndex).setText(text);
+        thisDG.invalidate();
     }
 
     public void setSize(int i){
@@ -220,5 +206,20 @@ public class Event {
     }
     public void supNode(){
         dotList.supDot(nodeIndex);
+        thisDG.invalidate();
+    }
+    public void moveNode(){
+        dotList.getDot(nodeIndex).setY((int) eventY);
+        dotList.getDot(nodeIndex).setX((int) eventX);
+        DotList dl = dotList.containsDot(dotList.getDot(nodeIndex));
+        for(int i = 0; i < dl.getSize(); i++ ) {
+            ArcList arcList = dl.getDot(i).getArcList();
+            for (int y = 0; y < arcList.getSize() - 1; y++) {
+                arcList.getArc(y).move();
+            }
+        }
+    }
+    public void moveMiddle() {
+        dotList.getDot(middle[0]).getArcList().getArc(middle[1]).moveMiddle(eventX, eventY);
     }
 }
