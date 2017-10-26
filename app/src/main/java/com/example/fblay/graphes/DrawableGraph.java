@@ -21,10 +21,11 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 	private Paint mPaint;
     private Event e;
     private int longClick;
-    Context context;
-    DotList dotList;
-    AttributeSet attrs;
-    int mode = -1;
+
+    private Context context;
+    private DotList dotList;
+    private AttributeSet attrs;
+    private int mode = -1;
 
 	public DrawableGraph(Context c, AttributeSet attrs) {
 		super(c, attrs);
@@ -38,7 +39,6 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 		backgroundPaint.setColor(Color.CYAN);
 	}
 
-    // override onDraw
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
@@ -102,5 +102,21 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
     public boolean onLongClick(View view) {
         longClick = e.checkLongClick();
         return true;
+    }
+
+    public AttributeSet getAttrs() {
+        return this.attrs;
+    }
+
+    public DotList getDotList() {
+        return this.dotList;
+    }
+
+    public int getMode() {
+        return this.mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 }

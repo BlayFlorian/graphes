@@ -41,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
             TextView t=(TextView)findViewById(R.id.modeText);
             t.setText(item.getTitle());
             switch (id) {
-                case R.id.cNode: graph.mode = 0;
+                case R.id.cNode: graph.setMode(0);
                     break;
-                case R.id.cArc: graph.mode = 1;
+                case R.id.cArc: graph.setMode(1);
                     break;
-                case R.id.cModify: graph.mode = 2;
+                case R.id.cModify: graph.setMode(2);
                     break;
-                default: graph.mode = -1;
+                default: graph.setMode(-1);
                     break;
             }
         }

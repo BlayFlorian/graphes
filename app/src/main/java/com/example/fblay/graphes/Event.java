@@ -21,19 +21,19 @@ import android.widget.NumberPicker;
 
 public class Event {
     private float eventX, eventY, startX, startY;
-    int nodeIndex;
-    int[] middle;
-    DotList dotList;
-    Context context;
-    AttributeSet attrs;
-    DrawableGraph thisDG;
-    ArcList arcList;
+    private int nodeIndex;
+    private int[] middle;
+    private DotList dotList;
+    private Context context;
+    private AttributeSet attrs;
+    private DrawableGraph thisDG;
+    private ArcList arcList;
 
     public Event(DrawableGraph thisDG) {
         this.thisDG = thisDG;
-        this.context = thisDG.context;
-        this.attrs = thisDG.attrs;
-        this.dotList = thisDG.dotList;
+        this.context = thisDG.getContext();
+        this.attrs = thisDG.getAttrs();
+        this.dotList = thisDG.getDotList();
         this.eventX = 0;
         this.eventY = 0;
     }
@@ -42,7 +42,7 @@ public class Event {
         this.eventX = x;
         this.eventY = y;
     }
-    // when ACTION_DOWN start touch according to the x,y values
+
     public void startTouch() {
         nodeIndex = this.dotList.searchDot(this.eventX, this.eventY);
         this.startY = eventY;
@@ -82,7 +82,7 @@ public class Event {
                 return 1;
             } else if(middle[0] >= 0){
                 return 2;
-            } else if (thisDG.mode == 0){
+            } else if (thisDG.getMode() == 0){
                 textDialog(0);
             }
         }
@@ -186,6 +186,7 @@ public class Event {
         builder.show();
     }
 
+    //====================Actions=========================//
     public void newNode(String text){
         Dot d = new Dot(context,attrs);
         d.setText(text);
