@@ -28,15 +28,17 @@ public class Event {
     int mode;
     Context context;
     AttributeSet attrs;
+    DrawableGraph drawableGraph;
 
     ArcList arcList;
 
-    public Event(DotList dList, Context context, AttributeSet attrs) {
+    public Event(DotList dList, Context context, AttributeSet attrs, DrawableGraph drawableGraph) {
         this.context = context;
         this.attrs = attrs;
         this.eventX = 0;
         this.eventY = 0;
         this.dotList = dList;
+        this.drawableGraph = drawableGraph;
     }
     // when ACTION_DOWN start touch according to the x,y values
     public void startTouch() {
