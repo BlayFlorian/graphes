@@ -79,7 +79,7 @@ public class Event {
             } else if(middle[0] >= 0){
                 return 2;
             } else if (mode == 0){
-                textDialog(0);
+                dialogText(0);
             }
         }
         return -1;
@@ -105,7 +105,7 @@ public class Event {
     //0 = ajout noeud
     //1 = modification Text noeud
     @SuppressLint("InflateParams") //C'est l'exception donc pas de Warning Linter
-    public void textDialog(final int arg) {
+    public void dialogText(final int arg) {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.dialogue_name, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
@@ -137,26 +137,25 @@ public class Event {
 
     public void menuNode(){
         CharSequence choice[] = new CharSequence[] {"Modifier text", "Modifier taille", "Modifier couleur", "Supprimer Noeud"};
-
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Menu Noeud");
         builder.setItems(choice, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(which == 0){
-                    textDialog(1);
+                    dialogText(1);
                 } else if(which == 1) {
-                    show();
+                    dialogSize();
                 } else if(which == 2) {
-                    colorPicker();
-                } else if(which == 2) {
+                    dialogColorPicker();
+                } else if(which == 3) {
                     supNode();
                 }
             }
         });
         builder.show();
     }
-    public void colorPicker(){
+    public void dialogColorPicker(){
         CharSequence choice[] = new CharSequence[] {"Rouge", "Vert", "Bleu", "Orange", "Cyan", "Magenta", "Noir"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -171,14 +170,14 @@ public class Event {
         builder.show();
     }
 
-    public void show()
+    public void dialogSize()
     {
         LayoutInflater li = LayoutInflater.from(context);
         AlertDialog.Builder d = new AlertDialog.Builder(
                 context);
         View promptsView = li.inflate(R.layout.dialogue_number, null);
         d.setView(promptsView);
-        d.setTitle("NumberPicker");
+        d.setTitle("Taille du noeud");
         final NumberPicker np = (NumberPicker) promptsView
                 .findViewById(R.id.numberPicker1);
         np.setMaxValue(100); // max value 100
@@ -197,8 +196,6 @@ public class Event {
                         }
                     });
         d.show();
-
-
     }
 
     public void newNode(String text){

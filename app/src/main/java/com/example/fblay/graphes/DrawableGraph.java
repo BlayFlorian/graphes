@@ -19,16 +19,11 @@ import java.util.ArrayList;
 public class DrawableGraph extends View implements View.OnLongClickListener {
 	Context context;
 	private Paint backgroundPaint;
-	private static final float TOLERANCE = 5;
-    ArrayList<Dot> l;
     DotList dotList;
 	AttributeSet attrs;
     int mode = -1;
-
     int longClick;
-
 	private Paint mPaint;
-
     Event e;
 
 	public DrawableGraph(Context c, AttributeSet attrs) {
@@ -39,29 +34,20 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
         setOnLongClickListener(this);
         dotList = new DotList(context, attrs);
         e = new Event(dotList, context, attrs);
-
 		backgroundPaint = new Paint();
 		backgroundPaint.setColor(Color.CYAN);
-		// and we set a new DrawGraph with the desired attributes
-
 	}
 
     // override onDraw
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-        Log.e("", ""+mode);
+        Log.e("Mode", ""+mode);
 		int width = canvas.getWidth();
 		int height = canvas.getHeight();
 		canvas.drawRect(0, 0, width, height, backgroundPaint);
-		// find node
-		l = dotList.getList();
+        ArrayList<Dot> l = dotList.getList();
 		mPaint = new Paint();
-		mPaint.setAntiAlias(true);
-		mPaint.setColor(Color.BLACK);
-		mPaint.setStyle(Paint.Style.STROKE);
-		mPaint.setStrokeJoin(Paint.Join.ROUND);
-		mPaint.setStrokeWidth(4f);
         for(int i = 0; i < l.size(); i++) {
             l.get(i).Draw(canvas);
             ArcList arcL = l.get(i).getArcList();
@@ -74,7 +60,6 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
                 }
             }
         }
-		// draw the mPath with the mPaint on the canvas when onDraw
 	}
 
     @Override
@@ -83,12 +68,9 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 		e.eventY = event.getY();
 		e.mode = mode;
 		switch (event.getAction()) {
-			//Quand tu pose ton doigt
 		case MotionEvent.ACTION_DOWN:
 			e.startTouch();
-			invalidate();
 			break;
-		//Des que tu bouge ton doigt
 		case MotionEvent.ACTION_MOVE:
 		    if(longClick == 1 && mode == 2) {
                 e.moveNode();
@@ -97,7 +79,6 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 			}else if (mode == 1) {
                 e.moveTouch();
             }
-            invalidate();
 			break;
 		//des que tu retire ton doigt
 		case MotionEvent.ACTION_UP:
@@ -107,9 +88,9 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 				e.menuNode();
 			}
             longClick = -1;
-			invalidate();
 			break;
 		}
+        invalidate();
         return super.onTouchEvent(event);
 	}
 
@@ -118,9 +99,5 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
         longClick = e.checkLongClick();
         return true;
     }
-
-    public void clearCanvas() {
-		Log.e("clear", "clear");
-	}
 
 }

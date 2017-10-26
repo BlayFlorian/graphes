@@ -101,6 +101,7 @@ public class DotList {
         return dl;
     }
     public void supDot(int index){
+        Log.e("sup", "sup");
         l.remove(index);
     }
 

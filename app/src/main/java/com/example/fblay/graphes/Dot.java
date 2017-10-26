@@ -33,9 +33,6 @@ class Dot extends View {
         textPaint.setTextSize(40);
         textPaint.setAntiAlias(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
-
-        //bounds = new RectF();
-        //textPaint.getTextBounds("0", 0, 1, bounds);
         rectF = new RectF();
         circle.setColor(Color.BLACK);
         circle.setAntiAlias(true);
@@ -45,20 +42,19 @@ class Dot extends View {
     public void Draw(Canvas canvas) {
         String t = String.valueOf(text);
         int size = t.length();
-        //canvas.drawCircle(x, y, RADIUS, circle);
         rectF.set(x + RADIUS + (size - 1) * 10, y + RADIUS, x - RADIUS - (size - 1) * 10, y-RADIUS);
         canvas.drawOval(rectF, circle);
         canvas.drawText(t, x, y, textPaint);
-        //canvas.drawRoundRect(rectF, x, y, circle);
-        invalidate();
     }
 
     public void setX (int nx) {
         this.x = nx;
+        invalidate();
     }
 
     public void setY (int ny) {
         this.y = ny;
+        invalidate();
     }
 
     public void setColor(int c) {
@@ -78,8 +74,17 @@ class Dot extends View {
             default: circle.setColor(Color.BLACK);
                 break;
         }
+        invalidate();
     }
 
+    public void setRadius(int i) {
+        RADIUS = i;
+        invalidate();
+    }
+    public void setText(String t) {
+        this.text = t;
+        invalidate();
+    }
 
     public float getX(){
         return this.x;
@@ -91,17 +96,11 @@ class Dot extends View {
 
     public float getRadius() { return RADIUS; }
 
-    public void setRadius(int i) {
-        RADIUS = i;
-    }
 
     public String getText() {
         return this.text;
     }
 
-    public void setText(String t) {
-        this.text = t;
-    }
 
     public ArcList getArcList(){
         return arcList;
