@@ -38,7 +38,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
         setLongClickable(true);
         setOnLongClickListener(this);
         dotList = new DotList(context, attrs);
-        e = new Event(dotList, context, attrs);
+        e = new Event(dotList, context, attrs, this);
 
 		backgroundPaint = new Paint();
 		backgroundPaint.setColor(Color.CYAN);

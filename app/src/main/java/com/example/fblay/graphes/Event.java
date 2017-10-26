@@ -28,15 +28,16 @@ public class Event {
     int mode;
     Context context;
     AttributeSet attrs;
-
+    DrawableGraph thisDG;
     ArcList arcList;
 
-    public Event(DotList dList, Context context, AttributeSet attrs) {
+    public Event(DotList dList, Context context, AttributeSet attrs, DrawableGraph thisDG) {
         this.context = context;
         this.attrs = attrs;
         this.eventX = 0;
         this.eventY = 0;
         this.dotList = dList;
+        this.thisDG = thisDG;
     }
     // when ACTION_DOWN start touch according to the x,y values
     public void startTouch() {
@@ -215,6 +216,7 @@ public class Event {
 
     public void setSize(int i){
         dotList.getDot(nodeIndex).setRadius(i);
+        thisDG.invalidate();
     }
     public void supNode(){
         dotList.supDot(nodeIndex);
