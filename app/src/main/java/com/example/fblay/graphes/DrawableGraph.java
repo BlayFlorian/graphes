@@ -70,6 +70,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			e.startTouch();
+            invalidate();
 			break;
 		case MotionEvent.ACTION_MOVE:
 		    if(longClick == 1 && mode == 2) {
@@ -79,6 +80,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 			}else if (mode == 1) {
                 e.moveTouch();
             }
+            invalidate();
 			break;
 		//des que tu retire ton doigt
 		case MotionEvent.ACTION_UP:
@@ -88,9 +90,9 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 				e.menuNode();
 			}
             longClick = -1;
+            invalidate();
 			break;
 		}
-        invalidate();
         return super.onTouchEvent(event);
 	}
 
