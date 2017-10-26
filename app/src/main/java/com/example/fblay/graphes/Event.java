@@ -178,7 +178,7 @@ public class Event {
                     numberDialg();
                 } else if(which == 2) {
                     colorPickerDialog();
-                } else if(which == 2) {
+                } else if(which == 3) {
                     supNode();
                 }
             }
