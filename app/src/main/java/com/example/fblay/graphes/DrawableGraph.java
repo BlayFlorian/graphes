@@ -45,8 +45,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 		int width = canvas.getWidth();
 		int height = canvas.getHeight();
 		canvas.drawRect(0, 0, width, height, backgroundPaint);
-        ArrayList<Dot> l = dotList.getList();
-		l = dotList.getList();
+        ArrayList<Dot> l = dotList.getDotList();
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
 		mPaint.setColor(Color.BLACK);

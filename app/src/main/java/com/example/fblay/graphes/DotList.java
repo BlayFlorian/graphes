@@ -14,36 +14,66 @@ import java.util.List;
 
 public class DotList {
     ArrayList<Dot> l;
+
     public DotList() {
         l = new ArrayList<Dot>();
     }
 
     public DotList (Context context, AttributeSet attrs){
         int xMax = 1024;
-        int xMin = 50;
-        int yMin = 50;
-        int x;
-        int y;
         l = new ArrayList<Dot>();
-        for(int i = 0; i < 4; i++){
-            x = xMax / (i + 2);
-            for (int j = 0; j < i+1; j++){
-                Dot d = new Dot(context, attrs);
-                d.setX(x * (j+1));
-                d.setY(250 * (i + 1));
-                d.setText(String.valueOf(l.size()));
-                l.add(d);
-            }
+        int y = 0;
+        for (int i = 0; i < 9; i++) {
+            Dot d = new Dot(context, attrs);
+            d.setX((xMax / 3) * (i % 3) + 200);
+            if(i%3 == 0) { y ++; }
+            d.setY((350 * y) + 50);
+            d.setText(String.valueOf(l.size()));
+            l.add(d);
         }
     }
+
     public int getSize() {
         return l.size();
     }
-    public ArrayList<Dot> getList() {
+
+    public ArrayList<Dot> getDotList() {
         return l;
     }
+
+    public ArcList getArcList(int index) {
+        return l.get(index).getArcList();
+    }
+
+    public Dot getDot(int index){
+        return l.get(index);
+    }
+
     public void putDot(Dot d) {
         l.add(d);
+    }
+
+    // DotList contient ce Dot
+    public boolean contain(Dot dot){
+        for(int i = 0; i < l.size(); i++) {
+            if (l.get(i).equals(dot)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // list de noeud connecté a ce noeud
+    public DotList containsDot(Dot dot) {
+        DotList dl = new DotList();
+        for(int i = 0; i < l.size(); i++) {
+            ArcList arcList = l.get(i).getArcList();
+            for (int y = 0 ;y < arcList.getSize() - 1; y++) {
+                dl.putDot(arcList.getArc(y).getFrom());
+                dl.putDot(arcList.getArc(y).getTo());
+            }
+        }
+        return dl;
     }
 
     public int searchDot(float x, float y) {
@@ -69,38 +99,20 @@ public class DotList {
         return new int[]{-1,-1};
     }
 
-    public Dot getDot(int index){
-        return l.get(index);
-    }
 
-    public ArcList getArcList(int index) {
-        return l.get(index).getArcList();
-    }
-
-    public boolean contain(Dot dot){
-        for(int i = 0; i < l.size(); i++) {
-            if (l.get(i).equals(dot)){
-                return true;
+    public void supDot(int index){
+        DotList d = containsDot(l.get(index));
+        for(int i = 0; i < d.getSize(); i++) {
+            ArcList arcList = d.getArcList(i);
+            for(int y = 0; y < arcList.getSize() -1; y ++) {
+                if (!d.contain(arcList.getArc(y).getFrom())) {
+                    arcList.deleteArc(y);
+                }
+                if (!d.contain(arcList.getArc(y).getTo())) {
+                    arcList.deleteArc(y);
+                }
             }
         }
-        return false;
-    }
-
-    public DotList containsDot(Dot dot) {
-        DotList dl = new DotList();
-        for(int i = 0; i < l.size(); i++) {
-            ArcList arcList = l.get(i).getArcList();
-            for (int y = 0 ;y < arcList.getSize() - 1; y++) {
-                if (!dl.contain(arcList.getArc(y).getFrom())) {
-                    dl.putDot(arcList.getArc(y).getFrom());
-                }
-                if (!dl.contain(arcList.getArc(y).getTo()))
-                    dl.putDot(arcList.getArc(y).getTo());
-                }
-            }
-        return dl;
-    }
-    public void supDot(int index){
         l.remove(index);
     }
 

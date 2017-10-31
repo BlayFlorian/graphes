@@ -23,6 +23,7 @@ public class ArcList {
     public Arc getCurrent() {
         return arrayArc.get(arrayArc.size() - 1);
     }
+
     public Arc getArc(int index) {
         return arrayArc.get(index);
     }
@@ -45,6 +46,10 @@ public class ArcList {
             }
         }
         return -1;
+    }
+
+    public void deleteArc(int index) {
+        arrayArc.remove(index);
     }
 
 }
