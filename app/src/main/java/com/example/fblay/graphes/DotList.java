@@ -69,8 +69,9 @@ public class DotList {
         for(int i = 0; i < l.size(); i++) {
             ArcList arcList = l.get(i).getArcList();
             for (int y = 0 ;y < arcList.getSize() - 1; y++) {
-                dl.putDot(arcList.getArc(y).getFrom());
-                dl.putDot(arcList.getArc(y).getTo());
+                if(!dl.contain(arcList.getArc(y).getTo())) {
+                    dl.putDot(arcList.getArc(y).getTo());
+                }
             }
         }
         return dl;
@@ -105,10 +106,7 @@ public class DotList {
         for(int i = 0; i < d.getSize(); i++) {
             ArcList arcList = d.getArcList(i);
             for(int y = 0; y < arcList.getSize() -1; y ++) {
-                if (!d.contain(arcList.getArc(y).getFrom())) {
-                    arcList.deleteArc(y);
-                }
-                if (!d.contain(arcList.getArc(y).getTo())) {
+                if (arcList.getArc(y).getTo().equals(l.get(index))){
                     arcList.deleteArc(y);
                 }
             }

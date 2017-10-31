@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 class Dot extends View {
@@ -82,10 +83,6 @@ class Dot extends View {
 
     public float getRadius() { return RADIUS; }
 
-    public String getText() {
-        return this.text;
-    }
-
     public ArcList getArcList(){
         return arcList;
     }
@@ -98,6 +95,9 @@ class Dot extends View {
         this.text = t;
     }
 
-
+    public String toString(){
+        Log.e("Nom:", this.text);
+        return this.text;
+    }
 
 }
