@@ -18,6 +18,7 @@ public class Arc {
     Dot from;
     Dot to;
     Path path;
+    Paint mPaint;
     Paint rectPaint;
 
     RectF rectF = null;
@@ -27,6 +28,12 @@ public class Arc {
         this.from = null;
         this.to = null;
         path = new Path();
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(Color.BLACK);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeWidth(4f);
     }
     public Arc(Dot d1, Dot d2){
         from = d1;
@@ -58,6 +65,7 @@ public class Arc {
     public void drawRect(Canvas canvas){
         canvas.drawRoundRect(this.rectF, 6, 6, this.rectPaint);
     }
+
     private void drawArrow(float x, float y) {
         path.setFillType(Path.FillType.EVEN_ODD);
         path.moveTo(x - 40f, y - 40f);
@@ -118,5 +126,38 @@ public class Arc {
         return position;
     }
 
+    //----------------Paint--------------//
+    public Paint getPaint() {
+        return mPaint;
+    }
 
+    public void setColor(int i) {
+        switch (i) {
+            case 0: mPaint.setColor(Color.RED);
+                break;
+            case 1: mPaint.setColor(Color.GREEN);
+                break;
+            case 2: mPaint.setColor(Color.BLUE);
+                break;
+            case 3: mPaint.setColor(Color.YELLOW);
+                break;
+            case 4: mPaint.setColor(Color.CYAN);
+                break;
+            case 5: mPaint.setColor(Color.MAGENTA);
+                break;
+            default: mPaint.setColor(Color.BLACK);
+                break;
+        }
+    }
+
+    public void setWidthArc(int i) {
+        mPaint.setStrokeWidth(i);
+    }
+
+    public void setText(String t){
+
+    }
+    public void setWidthText(int i){
+
+    }
 }

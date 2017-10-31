@@ -121,7 +121,7 @@ public class Event {
         alertDialog.show();
     }
 
-    public void colorPickerDialog(){
+    public void colorPickerDialog(final int arg){
         CharSequence choice[] = new CharSequence[] {"Rouge", "Vert", "Bleu", "Orange", "Cyan", "Magenta", "Noir"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -129,14 +129,19 @@ public class Event {
         builder.setItems(choice, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dotList.getDot(nodeIndex).setColor(which);
-                thisDG.invalidate();
+                if(arg == 0) {
+                    dotList.getDot(nodeIndex).setColor(which);
+                    thisDG.invalidate();
+                } else if (arg == 1) {
+                    dotList.getDot(middle[0]).getArcList().getArc(middle[1]).setColor(which);
+                    thisDG.invalidate();
+                }
             }
         });
         builder.show();
     }
 
-    public void numberDialg()
+    public void numberDialg(final int arg, int min, int max)
     {
         LayoutInflater li = LayoutInflater.from(context);
         AlertDialog.Builder d = new AlertDialog.Builder(
@@ -146,13 +151,17 @@ public class Event {
         d.setTitle("NumberPicker");
         final NumberPicker np = (NumberPicker) promptsView
                 .findViewById(R.id.numberPicker1);
-        np.setMaxValue(100); // max value 100
-        np.setMinValue(50);   // min value 0
+        np.setMaxValue(max);
+        np.setMinValue(min);
         np.setWrapSelectorWheel(false);
         d.setPositiveButton("OK",
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,int id) {
-                    setSize(np.getValue());
+                    if(arg == 0) {
+                        setSizeNode(np.getValue());
+                    } else if(arg == 1) {
+                        setSizeArc(np.getValue());
+                    }
                 }
             })
             .setNegativeButton("Cancel",
@@ -175,9 +184,9 @@ public class Event {
                 if(which == 0){
                     textDialog(1);
                 } else if(which == 1) {
-                    numberDialg();
+                    numberDialg(0, 50, 100);
                 } else if(which == 2) {
-                    colorPickerDialog();
+                    colorPickerDialog(0);
                 } else if(which == 3) {
                     supNode();
                 }
@@ -195,13 +204,13 @@ public class Event {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(which == 0){
-                    //
+                    supArc();
                 } else if(which == 1) {
                     //
                 } else if(which == 2) {
-                    //
+                    colorPickerDialog(1);
                 } else if(which == 3) {
-                    //
+                    numberDialg(1, 10, 30);
                 }
             }
         });
@@ -223,10 +232,16 @@ public class Event {
         thisDG.invalidate();
     }
 
-    public void setSize(int i){
+    public void setSizeNode(int i){
         dotList.getDot(nodeIndex).setRadius(i);
         thisDG.invalidate();
     }
+
+    private void setSizeArc(int i) {
+        dotList.getDot(middle[0]).getArcList().getArc(middle[1]).setWidthArc(i);
+        thisDG.invalidate();
+    }
+
     public void supNode(){
         dotList.supDot(nodeIndex);
         thisDG.invalidate();
@@ -244,5 +259,9 @@ public class Event {
     }
     public void moveMiddle() {
         dotList.getDot(middle[0]).getArcList().getArc(middle[1]).moveMiddle(eventX, eventY);
+    }
+    private void supArc() {
+        dotList.getDot(middle[0]).getArcList().deleteArc(middle[1]);
+        thisDG.invalidate();
     }
 }

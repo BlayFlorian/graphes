@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 public class DrawableGraph extends View implements View.OnLongClickListener {
 	private Paint backgroundPaint;
-	private Paint mPaint;
     private Event e;
     private int longClick;
 
@@ -46,17 +45,12 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 		int height = canvas.getHeight();
 		canvas.drawRect(0, 0, width, height, backgroundPaint);
         ArrayList<Dot> l = dotList.getDotList();
-		mPaint = new Paint();
-		mPaint.setAntiAlias(true);
-		mPaint.setColor(Color.BLACK);
-		mPaint.setStyle(Paint.Style.STROKE);
-		mPaint.setStrokeJoin(Paint.Join.ROUND);
-		mPaint.setStrokeWidth(4f);
         for(int i = 0; i < l.size(); i++) {
             l.get(i).Draw(canvas);
             ArcList arcL = l.get(i).getArcList();
             for(int y = 0; y < arcL.getSize(); y++) {
                 if(arcL.getIndex(y) != null) {
+                    Paint mPaint = arcL.getArc(y).getPaint();
                     canvas.drawPath(arcL.getIndex(y), mPaint);
 					if(arcL.getArc(y).rectF != null) {
 						arcL.getArc(y).drawRect(canvas);
