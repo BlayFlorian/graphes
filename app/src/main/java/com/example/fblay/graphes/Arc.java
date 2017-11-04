@@ -35,11 +35,6 @@ public class Arc {
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeWidth(4f);
     }
-    public Arc(Dot d1, Dot d2){
-        from = d1;
-        to = d2;
-        path = new Path();
-    }
 
     public void setArc(Dot d1, Dot d2) {
         this.from = d1;
@@ -73,15 +68,12 @@ public class Arc {
         path.lineTo(x - 40f, y - 70f);
         path.lineTo(x - 40f, y - 40f);
         path.close();
-        Matrix mMatrix = new Matrix();
-        RectF bounds = new RectF();
-        path.computeBounds(bounds, true);
-        mMatrix.postRotate(90, bounds.centerX(), bounds.centerY());
     }
     public void draw(Dot d1, float endX, float endY) {
         path.reset();
         path.moveTo(d1.getX(), d1.getY());
         path.lineTo(endX, endY);
+        drawArrow(endX, endY);
     }
 
     public void move(){
