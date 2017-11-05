@@ -49,10 +49,11 @@ public class Arc {
         return aCoordinates;
     }
 
-    private float[] getBorder() {
+    private float[] getBorder(int x) {
         PathMeasure pm = new PathMeasure(path, false);
         float[] aCoordinates = new float[2];
-        pm.getPosTan(pm.getLength() - 50 , aCoordinates, null);
+        //float size = 50 + to.
+        pm.getPosTan(pm.getLength() - x , aCoordinates, null);
         return aCoordinates;
     }
 
@@ -68,7 +69,6 @@ public class Arc {
     }
 
     private void drawArrow(float fromX, float fromY, float toX, float toY) {
-        path.lineTo(fromX, fromY);
         float deltaX =   toX-fromX;
         float deltaY =   toY-fromY;
         float frac = (float) 0.1;
@@ -99,17 +99,22 @@ public class Arc {
         position = getMiddleArc();
         path.moveTo(position[0], position[1]);
         setRectF(position[0], position[1]);
-        float [] res = getBorder();
-        drawArrow(from.getX(), from.getY(), res[0], res[1]);
+        float [] toBorder = getBorder(50);
+        float [] fromBorder = getBorder(300);
+        drawArrow(fromBorder[0], fromBorder[1], toBorder[0], toBorder[1]);
     }
 
     public void moveMiddle(float x, float y) {
         path.reset();
         path.moveTo(from.getX(), from.getY());
+        position = getMiddleArc();
         path.quadTo(x, y, to.getX(), to.getY());
         position = getMiddleArc();
         path.moveTo(position[0], position[1]);
         setRectF(position[0], position[1]);
+        float [] toBorder = getBorder(50);
+        float [] fromBorder = getBorder(200);
+        drawArrow(fromBorder[0], fromBorder[1], toBorder[0], toBorder[1]);
     }
 
     public Path getPath() {

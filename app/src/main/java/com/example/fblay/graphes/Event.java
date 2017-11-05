@@ -57,7 +57,6 @@ public class Event {
     public void moveTouch() {
         if(this.nodeIndex >= 0) {
             arcList.getCurrent().draw(this.dotList.getDot(nodeIndex), eventX, eventY);
-
         }
     }
 
