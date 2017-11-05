@@ -40,13 +40,19 @@ public class Arc {
         this.from = d1;
         this.to = d2;
         move();
-
     }
 
     private float[] getMiddleArc() {
         PathMeasure pm = new PathMeasure(path, false);
         float[] aCoordinates = new float[2];
         pm.getPosTan(pm.getLength() / 2 , aCoordinates, null);
+        return aCoordinates;
+    }
+
+    private float[] getBorder() {
+        PathMeasure pm = new PathMeasure(path, false);
+        float[] aCoordinates = new float[2];
+        pm.getPosTan(pm.getLength() - 50 , aCoordinates, null);
         return aCoordinates;
     }
 
@@ -61,28 +67,40 @@ public class Arc {
         canvas.drawRoundRect(this.rectF, 6, 6, this.rectPaint);
     }
 
-    private void drawArrow(float x, float y) {
-        path.setFillType(Path.FillType.EVEN_ODD);
-        path.moveTo(x - 40f, y - 40f);
-        path.lineTo(x - 70f, y - 40f);
-        path.lineTo(x - 40f, y - 70f);
-        path.lineTo(x - 40f, y - 40f);
-        path.close();
+    private void drawArrow(float fromX, float fromY, float toX, float toY) {
+        path.lineTo(fromX, fromY);
+        float deltaX =   toX-fromX;
+        float deltaY =   toY-fromY;
+        float frac = (float) 0.1;
+        float point_x_1 = fromX + (float) ((1 - frac) * deltaX + frac * deltaY);
+        float point_y_1 = fromY+ (float) ((1 - frac) * deltaY - frac * deltaX);
+        float point_x_2 = toX;
+        float point_y_2 = toY;
+        float point_x_3 = fromX + (float) ((1 - frac) * deltaX - frac * deltaY);
+        float point_y_3 = fromY+ (float) ((1 - frac) * deltaY + frac * deltaX);
+        path.moveTo(point_x_1, point_y_1);
+        path.lineTo(point_x_2, point_y_2);
+        path.lineTo(point_x_3, point_y_3);
+        path.lineTo(point_x_1, point_y_1);
+        path.lineTo(point_x_1, point_y_1);
+        //
     }
     public void draw(Dot d1, float endX, float endY) {
         path.reset();
         path.moveTo(d1.getX(), d1.getY());
         path.lineTo(endX, endY);
-        drawArrow(endX, endY);
+        drawArrow(d1.getX(), d1.getY(), endX, endY);
     }
 
     public void move(){
         path.reset();
         path.moveTo(from.getX(), from.getY());
-        path.quadTo(from.getX(), to.getY(), to.getX() , to.getY());
+        path.quadTo(from.getX(), from.getY(), to.getX() , to.getY());
         position = getMiddleArc();
         path.moveTo(position[0], position[1]);
         setRectF(position[0], position[1]);
+        float [] res = getBorder();
+        drawArrow(from.getX(), from.getY(), res[0], res[1]);
     }
 
     public void moveMiddle(float x, float y) {
