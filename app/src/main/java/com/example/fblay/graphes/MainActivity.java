@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Log.e("item:", "fef" + id);
         if (id == R.id.cNode || id == R.id.cArc || id == R.id.cModify) {
             item.setChecked(true);
             TextView t=(TextView)findViewById(R.id.modeText);

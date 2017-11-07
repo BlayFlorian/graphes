@@ -72,6 +72,9 @@ public class DotList {
                 if(!dl.contain(arcList.getArc(y).getTo())) {
                     dl.putDot(arcList.getArc(y).getTo());
                 }
+                if(!dl.contain(arcList.getArc(y).getFrom())) {
+                    dl.putDot(arcList.getArc(y).getFrom());
+                }
             }
         }
         return dl;
@@ -104,6 +107,7 @@ public class DotList {
     public void supDot(int index){
         DotList d = containsDot(l.get(index));
         for(int i = 0; i < d.getSize(); i++) {
+            Log.e("noeud", d.getDot(i).toString());
             ArcList arcList = d.getArcList(i);
             for(int y = 0; y < arcList.getSize() -1; y ++) {
                 if (arcList.getArc(y).getTo().equals(l.get(index))){

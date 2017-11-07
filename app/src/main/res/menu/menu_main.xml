@@ -10,7 +10,7 @@
                 android:checkableBehavior="none">
                 <!-- Notice how these items inherit from the group. -->
                 <item
-                    android:id="@+id/noncheckable_item_1"
+                    android:id="@+id/reset_graph"
                     android:title="@string/reset" />
                 <item
                     android:id="@+id/noncheckable_item_2"
