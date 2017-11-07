@@ -1,6 +1,7 @@
 package com.example.fblay.graphes;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -36,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Log.e("item:", "fef" + id);
         if (id == R.id.cNode || id == R.id.cArc || id == R.id.cModify) {
             item.setChecked(true);
             TextView t=(TextView)findViewById(R.id.modeText);
@@ -51,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
                 default: graph.setMode(-1);
                     break;
             }
+        }
+        if(id == R.id.reset_graph){
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

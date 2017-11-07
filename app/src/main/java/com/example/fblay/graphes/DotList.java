@@ -14,12 +14,21 @@ import java.util.List;
 
 public class DotList {
     ArrayList<Dot> l;
+    ArrayList<Dot> restart;
+    Context context;
+    AttributeSet attrs;
 
     public DotList() {
         l = new ArrayList<Dot>();
     }
 
     public DotList (Context context, AttributeSet attrs){
+        this.context = context;
+        this.attrs = attrs;
+        init();
+    }
+
+    private void init() {
         int xMax = 1024;
         l = new ArrayList<Dot>();
         int y = 0;
@@ -32,7 +41,7 @@ public class DotList {
             l.add(d);
         }
     }
-
+    
     public int getSize() {
         return l.size();
     }
