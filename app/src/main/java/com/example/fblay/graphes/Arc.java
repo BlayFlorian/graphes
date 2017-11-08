@@ -17,12 +17,13 @@ import android.util.Log;
 public class Arc {
     Dot from;
     Dot to;
+    float[] millieu = new float[]{0f,0f};
+    float[] courbure = new float[] {0f, 0f};
     Path path;
     Paint mPaint;
     Paint rectPaint;
 
     RectF rectF = null;
-    float[] position;
 
     public Arc () {
         this.from = null;
@@ -43,9 +44,13 @@ public class Arc {
     }
 
     private float[] getMiddleArc() {
+        Log.e("mamène", "mamène");
         PathMeasure pm = new PathMeasure(path, false);
         float[] aCoordinates = new float[2];
         pm.getPosTan(pm.getLength() / 2 , aCoordinates, null);
+        millieu[0] = aCoordinates[0];
+        millieu[1] = aCoordinates[1];
+        Log.e("millieu", ""+millieu[0]);
         return aCoordinates;
     }
 
@@ -90,28 +95,39 @@ public class Arc {
         path.moveTo(d1.getX(), d1.getY());
         path.lineTo(endX, endY);
         drawArrow(d1.getX(), d1.getY(), endX, endY);
+        getMiddleArc();
     }
 
     public void move(){
+        Log.e("x", ""+ millieu[0]);
         path.reset();
         path.moveTo(from.getX(), from.getY());
-        path.quadTo(from.getX(), from.getY(), to.getX() , to.getY());
-        position = getMiddleArc();
-        path.moveTo(position[0], position[1]);
-        setRectF(position[0], position[1]);
+        path.quadTo(millieu[0], millieu[1], to.getX() , to.getY());
+        //getMiddleArc();
+        setRectF(millieu[0], millieu[1]);
         float [] toBorder = getBorder(50);
         float [] fromBorder = getBorder(300);
         drawArrow(fromBorder[0], fromBorder[1], toBorder[0], toBorder[1]);
     }
 
     public void moveMiddle(float x, float y) {
+        getMiddleArc();
+        float y1 = (to.getX() - from.getX());
+        float x1 = (to.getY() - from.getY());
+        x = x - millieu[0] / 2;
+        y = y - millieu[1] / 2;
+        Log.e("x1", ""+x1);
+        Log.e("y1", ""+y1);
+        Log.e("x", ""+ x);
+        Log.e("y", ""+ y);
         path.reset();
         path.moveTo(from.getX(), from.getY());
-        position = getMiddleArc();
-        path.quadTo(x, y, to.getX(), to.getY());
-        position = getMiddleArc();
-        path.moveTo(position[0], position[1]);
-        setRectF(position[0], position[1]);
+        path.rQuadTo(x, y/2, y1, x1);
+        getMiddleArc();
+        //path.quadTo(x, y, to.getX(), to.getY());
+        getMiddleArc();
+        //path.moveTo(position[0], position[1]);
+        setRectF(millieu[0], millieu[1]);
         float [] toBorder = getBorder(50);
         float [] fromBorder = getBorder(200);
         drawArrow(fromBorder[0], fromBorder[1], toBorder[0], toBorder[1]);
@@ -138,7 +154,7 @@ public class Arc {
     }
 
     public float[] getPosition () {
-        return position;
+        return millieu;
     }
 
     //----------------Paint--------------//

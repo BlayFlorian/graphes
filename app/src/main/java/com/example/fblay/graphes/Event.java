@@ -248,6 +248,7 @@ public class Event {
         dotList.getDot(nodeIndex).setX((int) eventX);
         DotList dl = dotList.containsDot(dotList.getDot(nodeIndex));
         for(int i = 0; i < dl.getSize(); i++ ) {
+            dl.getDot(i).toString();
             ArcList arcList = dl.getDot(i).getArcList();
             for (int y = 0; y < arcList.getSize() - 1; y++) {
                 arcList.getArc(y).move();
