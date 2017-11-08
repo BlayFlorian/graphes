@@ -49,9 +49,9 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
             l.get(i).Draw(canvas);
             ArcList arcL = l.get(i).getArcList();
             for(int y = 0; y < arcL.getSize(); y++) {
-                if(arcL.getIndex(y) != null) {
+                if(arcL.getArc(y).getPath() != null) {
                     Paint mPaint = arcL.getArc(y).getPaint();
-                    canvas.drawPath(arcL.getIndex(y), mPaint);
+                    canvas.drawPath(arcL.getArc(y).getPath(), mPaint);
 					if(arcL.getArc(y).rectF != null) {
 						arcL.getArc(y).drawRect(canvas);
 					}
