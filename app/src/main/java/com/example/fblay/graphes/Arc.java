@@ -22,7 +22,6 @@ public class Arc {
     Dot from;
     Dot to;
     float[] millieu = new float[]{0f,0f};
-    float[] courbure = new float[] {0f, 0f};
     /**
      * path: chemin
      */
@@ -75,13 +74,9 @@ public class Arc {
      * @return les coordonnées du milieu de l'arc
      */
     private float[] getMiddleArc() {
-        Log.e("mamène", "mamène");
         PathMeasure pm = new PathMeasure(path, false);
         float[] aCoordinates = new float[2];
         pm.getPosTan(pm.getLength() / 2 , aCoordinates, null);
-        millieu[0] = aCoordinates[0];
-        millieu[1] = aCoordinates[1];
-        Log.e("millieu", ""+millieu[0]);
         return aCoordinates;
     }
 
@@ -152,10 +147,10 @@ public class Arc {
     public void draw(Dot d1, float endX, float endY) {
         //String t = String.valueOf(text);
         //int size = t.length();
-
         path.reset();
         path.moveTo(d1.getX(), d1.getY());
         path.lineTo(endX, endY);
+        millieu = getMiddleArc();
         drawArrow(d1.getX(), d1.getY(), endX, endY);
     }
 
@@ -163,11 +158,10 @@ public class Arc {
      *
      */
     public void move(){
-        Log.e("x", ""+ millieu[0]);
         path.reset();
         path.moveTo(from.getX(), from.getY());
         path.quadTo(millieu[0], millieu[1], to.getX() , to.getY());
-        //getMiddleArc();
+        getMiddleArc();
         setRectF(millieu[0], millieu[1]);
         float [] toBorder = getBorder(50);
         float [] fromBorder = getBorder(300);
@@ -180,26 +174,67 @@ public class Arc {
      * @param y: point d'ordonnée du milieu de l'arc
      */
     public void moveMiddle(float x, float y) {
-        getMiddleArc();
-        float y1 = (to.getX() - from.getX());
-        float x1 = (to.getY() - from.getY());
-        x = x - millieu[0] / 2;
-        y = y - millieu[1] / 2;
-        Log.e("x1", ""+x1);
-        Log.e("y1", ""+y1);
-        Log.e("x", ""+ x);
-        Log.e("y", ""+ y);
         path.reset();
+        //drawArrow(from.getX(), from.getY(), millieu[0], millieu[1]);
+        float deltaX =   to.getX()-from.getX();
+        float deltaY =   to.getY()-from.getY();
+        x = x - millieu[0];
+        y = y - millieu[1];
+        float frac = (float) 0.5;
+        float point_x_1 = from.getX() + (float) ((1 - frac) * deltaX + frac * deltaY);
+        float point_y_1 = from.getY()+ (float) ((1 - frac) * deltaY - frac * deltaX);
+        float point_x_3 = from.getX() + (float) ((1 - frac) * deltaX - frac * deltaY);
+        float point_y_3 = from.getY()+ (float) ((1 - frac) * deltaY + frac * deltaX);
+
+        float a1 = (point_y_1 - point_x_3);
+        float a2 = (point_y_3 - point_x_1);
+        float a = a1 / a2;
+        Log.e("point_x_1: ", point_x_1+"");
+        Log.e("point_y_1: ", point_y_1+"");
+        Log.e("point_x_3: ", point_x_3+"");
+        Log.e("point_y_3: ", point_y_3+"");
+        Log.e("a1: ",a1+"");
+        Log.e("a2: ",a2+"");
+        Log.e("a: ",a+"");
+        float y1 = 900;
+        path.moveTo(10,10);
+        path.lineTo(10, y1);
+        float b = point_y_3 + a * point_x_3;
+        Log.e("b:", b+"");
+        float x1 = (b - y1) / a;
+        Log.e("x1 ",x1+"");
+        path.moveTo(millieu[0], millieu[1]);
+        path.lineTo(x1, y1);
+        //path.lineTo(x1, y1);
+        //path.lineTo(point_x_3, point_y_3);
+
+
+        //path.lineTo(point_x_1, point_y_1);
+        //path.lineTo(point_x_1, point_y_1);
+
+        /*
+        Log.e("millieu", sizeMillieuX + "");
+        path.quadTo(from.getX(), from.getY(), x, y);
         path.moveTo(from.getX(), from.getY());
-        path.rQuadTo(x, y/2, y1, x1);
-        getMiddleArc();
+        if(from.getX() > x){
+            path.lineTo(x, from.getY());
+        } else {
+            path.lineTo(from.getX(), y);
+        }
+        path.lineTo(x, y);
+        path.moveTo(x, y);
+        path.quadTo(to.getX(),to.getY(), to.getX(), to.getY());
+        path.quadTo(from.getX(), from.getY(), x, y);
+        //getMiddleArc();
         //path.quadTo(x, y, to.getX(), to.getY());
-        getMiddleArc();
+        //getMiddleArc();
         //path.moveTo(position[0], position[1]);
+        /*
         setRectF(millieu[0], millieu[1]);
         float [] toBorder = getBorder(50);
         float [] fromBorder = getBorder(200);
         drawArrow(fromBorder[0], fromBorder[1], toBorder[0], toBorder[1]);
+        */
     }
 
     /**

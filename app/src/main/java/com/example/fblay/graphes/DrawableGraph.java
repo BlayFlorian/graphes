@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -16,7 +18,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-public class DrawableGraph extends View implements View.OnLongClickListener {
+public class DrawableGraph extends View implements View.OnLongClickListener, Parcelable {
 	private Paint backgroundPaint;
     private Event e;
     private int longClick;
@@ -115,5 +117,15 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 
     public void setMode(int mode) {
         this.mode = mode;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
     }
 }
