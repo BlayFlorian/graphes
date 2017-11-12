@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.RectF;
 import android.util.FloatProperty;
+import android.util.Log;
 
 /**
  *  @author Florian Blay & Lucile Floc
@@ -166,9 +167,18 @@ public class Arc {
      */
     public void move(){
         path.reset();
-        path.moveTo(from.getX(), from.getY());
-        path.lineTo(to.getX() , to.getY());
-        millieu = getMiddleArc();
+        if (from != null && to.equals(from)) {
+            path.reset();
+            path.moveTo(0,0);
+            path.moveTo(from.getX(),from.getY());
+            path.cubicTo(from.getX() - 250,from.getY() - 250,
+                    from.getX() + 250, from.getY() - 250,
+                    from.getX() , from.getY());
+        } else {
+            path.moveTo(from.getX(), from.getY());
+            path.lineTo(to.getX(), to.getY());
+            millieu = getMiddleArc();
+        }
         setRectFMiddle(millieu[0], millieu[1]);
         float [] toBorder = getBorder(50);
         float [] fromBorder = getBorder(100);
