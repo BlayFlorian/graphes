@@ -245,7 +245,7 @@ public class Event {
     }
 
     public void setTextNode(String text) {
-        dotList.getDot(middle[0]).getArcList().getArc(middle[1]).setTextArc(text);
+        dotList.getDot(nodeIndex).setTextPoint(text);
         thisDG.invalidate();
     }
     public void setTextArc(String text) {
