@@ -31,6 +31,7 @@ public class Event {
     private AttributeSet attrs;
     private DrawableGraph thisDG;
     private ArcList arcList;
+    private int res;
 
     /**
      * Constructeur de la classe Event
@@ -68,12 +69,11 @@ public class Event {
     }
 
     public void upTouch() {
-        int res = dotList.searchDot(eventX, eventY);
+        res = dotList.searchDot(eventX, eventY);
         if(this.nodeIndex >= 0) {
             arcList.getCurrent().path.reset();
             if(res >= 0) {
-                arcList.getCurrent().setArc(dotList.getDot(this.nodeIndex), dotList.getDot(res));
-                arcList.add();
+                textDialog(2);
             }
         }
     }
@@ -112,6 +112,10 @@ public class Event {
                                     newNode(""+userInput.getText());
                                 } else if(arg == 1){
                                     setTextNode(""+userInput.getText());
+                                } else if(arg == 2) {
+                                     newArc(""+userInput.getText());
+                                } else if(arg == 3) {
+                                    setTextArc(""+userInput.getText());
                                 }
                             }
                         })
@@ -165,6 +169,8 @@ public class Event {
                         setSizeNode(np.getValue());
                     } else if(arg == 1) {
                         setSizeArc(np.getValue());
+                    } else if(arg == 2) {
+                        setSizeText(np.getValue());
                     }
                 }
             })
@@ -210,11 +216,13 @@ public class Event {
                 if(which == 0){
                     supArc();
                 } else if(which == 1) {
-                    //
+                    textDialog(3);
                 } else if(which == 2) {
                     colorPickerDialog(1);
                 } else if(which == 3) {
                     numberDialg(1, 10, 30);
+                } else if(which == 4) {
+                    numberDialg(2, 15, 30);
                 }
             }
         });
@@ -230,9 +238,18 @@ public class Event {
         dotList.putDot(d);
         thisDG.invalidate();
     }
+    private void newArc(String text) {
+        arcList.getCurrent().setArc(dotList.getDot(this.nodeIndex), dotList.getDot(res), text);
+        arcList.add();
+        thisDG.invalidate();
+    }
 
     public void setTextNode(String text) {
-        dotList.getDot(nodeIndex).setTextPoint(text);
+        dotList.getDot(middle[0]).getArcList().getArc(middle[1]).setTextArc(text);
+        thisDG.invalidate();
+    }
+    public void setTextArc(String text) {
+        dotList.getDot(middle[0]).getArcList().getArc(middle[1]).setTextArc(text);
         thisDG.invalidate();
     }
 
@@ -243,6 +260,11 @@ public class Event {
 
     private void setSizeArc(int i) {
         dotList.getDot(middle[0]).getArcList().getArc(middle[1]).setWidthArc(i);
+        thisDG.invalidate();
+    }
+
+    private void setSizeText(int i) {
+        dotList.getDot(middle[0]).getArcList().getArc(middle[1]).setWidthTextArc(i);
         thisDG.invalidate();
     }
 

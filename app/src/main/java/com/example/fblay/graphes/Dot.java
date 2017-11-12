@@ -112,7 +112,6 @@ class Dot extends View {
     }
 
     public String toString(){
-        Log.e("Nom:", this.text);
         return this.text;
     }
 

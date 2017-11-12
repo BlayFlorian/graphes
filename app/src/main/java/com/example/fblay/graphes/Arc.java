@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.RectF;
 import android.util.FloatProperty;
-import android.util.Log;
 
 /**
  *  @author Florian Blay & Lucile Floc
@@ -22,7 +21,6 @@ public class Arc {
     Dot from;
     Dot to;
     float[] millieu = new float[]{0f,0f};
-    float[] courbure = new float[] {0f, 0f};
     /**
      * path: chemin
      */
@@ -31,8 +29,9 @@ public class Arc {
      * mPaint: dessin de l'arc
      * rectPaint: dessin du point
      */
-    Paint mPaint;
-    Paint rectPaint;
+    private Paint mPaint;
+    private Paint rectPaint;
+    private Paint textPaint;
     /**
      * rectF: point
      * position: coordonnées du point
@@ -42,7 +41,8 @@ public class Arc {
     /**
      * Propriétés privées étiquette
      */
-    private String text = "0";
+    private String text;
+    private int size = 15;
 
     /**
      * Constructeur de la classe Arc
@@ -57,6 +57,11 @@ public class Arc {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeWidth(4f);
+        textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(40);
+        textPaint.setAntiAlias(true);
+        textPaint.setTextAlign(Paint.Align.CENTER);
     }
 
     /**
@@ -64,9 +69,10 @@ public class Arc {
      * @param d1 : point de départ
      * @param d2 : point d'arrivée
      */
-    public void setArc(Dot d1, Dot d2) {
+    public void setArc(Dot d1, Dot d2, String t) {
         this.from = d1;
         this.to = d2;
+        this.text =t;
         move();
     }
 
@@ -75,13 +81,9 @@ public class Arc {
      * @return les coordonnées du milieu de l'arc
      */
     private float[] getMiddleArc() {
-        Log.e("mamène", "mamène");
         PathMeasure pm = new PathMeasure(path, false);
         float[] aCoordinates = new float[2];
         pm.getPosTan(pm.getLength() / 2 , aCoordinates, null);
-        millieu[0] = aCoordinates[0];
-        millieu[1] = aCoordinates[1];
-        Log.e("millieu", ""+millieu[0]);
         return aCoordinates;
     }
 
@@ -108,7 +110,7 @@ public class Arc {
         this.rectPaint.setColor(Color.WHITE);
         this.rectPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.rectPaint.setAntiAlias(true);
-        this.rectF = new RectF(x + 10, y + 10, x-10, y -10);
+        this.rectF = new RectF(x + size * text.length() , y + 10 * text.length(), x-size * text.length(), y -10 * text.length());
 
     }
 
@@ -117,7 +119,9 @@ public class Arc {
      * @param canvas
      */
     public void drawRect(Canvas canvas){
-        canvas.drawRoundRect(this.rectF, 6, 6, this.rectPaint);
+        millieu = getMiddleArc();
+        canvas.drawRoundRect(this.rectF, 90, 90, this.rectPaint);
+        canvas.drawText(text, millieu[0], millieu[1], textPaint);
     }
 
     /**
@@ -130,7 +134,7 @@ public class Arc {
     private void drawArrow(float fromX, float fromY, float toX, float toY) {
         float deltaX =   toX-fromX;
         float deltaY =   toY-fromY;
-        float frac = (float) 0.1;
+        float frac = (float) 0.5;
         float point_x_1 = fromX + (float) ((1 - frac) * deltaX + frac * deltaY);
         float point_y_1 = fromY+ (float) ((1 - frac) * deltaY - frac * deltaX);
         float point_x_2 = toX;
@@ -151,27 +155,23 @@ public class Arc {
      * @param endY
      */
     public void draw(Dot d1, float endX, float endY) {
-        //String t = String.valueOf(text);
-        //int size = t.length();
-
         path.reset();
         path.moveTo(d1.getX(), d1.getY());
         path.lineTo(endX, endY);
-        drawArrow(d1.getX(), d1.getY(), endX, endY);
+        millieu = getMiddleArc();
     }
 
     /**
      *
      */
     public void move(){
-        Log.e("x", ""+ millieu[0]);
         path.reset();
         path.moveTo(from.getX(), from.getY());
-        path.quadTo(millieu[0], millieu[1], to.getX() , to.getY());
-        //getMiddleArc();
+        path.lineTo(to.getX() , to.getY());
+        millieu = getMiddleArc();
         setRectFMiddle(millieu[0], millieu[1]);
         float [] toBorder = getBorder(50);
-        float [] fromBorder = getBorder(300);
+        float [] fromBorder = getBorder(100);
         drawArrow(fromBorder[0], fromBorder[1], toBorder[0], toBorder[1]);
     }
 
@@ -181,25 +181,24 @@ public class Arc {
      * @param y: point d'ordonnée du milieu de l'arc
      */
     public void moveMiddle(float x, float y) {
-        getMiddleArc();
-        float y1 = (to.getX() - from.getX());
-        float x1 = (to.getY() - from.getY());
-        x = x - millieu[0] / 2;
-        y = y - millieu[1] / 2;
-        Log.e("x1", ""+x1);
-        Log.e("y1", ""+y1);
-        Log.e("x", ""+ x);
-        Log.e("y", ""+ y);
+        millieu = getMiddleArc();
         path.reset();
         path.moveTo(from.getX(), from.getY());
-        path.rQuadTo(x, y/2, y1, x1);
-        getMiddleArc();
-        //path.quadTo(x, y, to.getX(), to.getY());
-        getMiddleArc();
-        //path.moveTo(position[0], position[1]);
+        path.lineTo(x, y);
+        float[] before = getBorder(200);
+        path.reset();
+        path.moveTo(to.getX(), to.getY());
+        path.lineTo(x,y);
+        float[] before1 = getBorder(200);
+        path.reset();
+        path.moveTo(from.getX(), from.getY());
+        path.lineTo(before[0], before[1]);
+        path.quadTo(x ,y, before1[0], before1[1]);
+        path.lineTo(to.getX(), to.getY());
+        millieu = getMiddleArc();
         setRectFMiddle(millieu[0], millieu[1]);
         float [] toBorder = getBorder(50);
-        float [] fromBorder = getBorder(200);
+        float [] fromBorder = getBorder(100);
         drawArrow(fromBorder[0], fromBorder[1], toBorder[0], toBorder[1]);
     }
 
@@ -297,6 +296,6 @@ public class Arc {
         this.text = t;
     }
     public void setWidthTextArc(int i){
-
+        this.size = i;
     }
 }

@@ -1,15 +1,22 @@
 package com.example.fblay.graphes;
 
+import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,9 +27,11 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Date;
 
 /**
  *  @author Florian Blay & Lucile Floc
@@ -34,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         graph = (DrawableGraph) findViewById(R.id.signature_canvas);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
     }
 
     @Override
@@ -68,7 +79,12 @@ public class MainActivity extends AppCompatActivity {
         }
         if(id == R.id.mail_graph){
             View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
-
+            if (Build.VERSION.SDK_INT >= 23) {
+                int permissionCheck = ContextCompat.checkSelfPermission(graph.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
+            }
             View screenView = rootView.getRootView();
             screenView.setDrawingCacheEnabled(true);
             Bitmap bitmap = Bitmap.createBitmap(screenView.getDrawingCache());
@@ -78,28 +94,33 @@ public class MainActivity extends AppCompatActivity {
             File dir = new File(dirPath);
             if(!dir.exists())
                 dir.mkdirs();
-            File file = new File(dirPath, Environment.getExternalStorageDirectory().getAbsolutePath() + "/Save");
+            File file = new File(dirPath, "/screen.png");
             try {
                 FileOutputStream fOut = new FileOutputStream(file);
                 bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
                 fOut.flush();
                 fOut.close();
+                shareImage(file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType("message/rfc822");
-            i.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"lucile.floc@gmail.com"});
-            i.putExtra(Intent.EXTRA_SUBJECT, "Capture écran graphe");
-            startActivity(Intent.createChooser(i, "Capture écran graphe"));
-
-            /*Intent uneIntention;
-            String mail = "lucile.floc@gmail.com";
-            //uneIntention = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto: " + mail));
-            uneIntention = new Intent (Intent.ACTION_SEND);
-            uneIntention.putExtra(Intent.EXTRA_EMAIL, mail);
-            startActivity(uneIntention);*/
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void shareImage(File file){
+        Uri uri = Uri.fromFile(file);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        try {
+            startActivity(Intent.createChooser(intent, "Share Screenshot"));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(graph.getContext(), "No App Available", Toast.LENGTH_SHORT).show();
+        }
     }
 }
