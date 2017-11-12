@@ -16,6 +16,13 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
+/**
+ *  @author Florian Blay & Lucile Floc
+ */
+
+/**
+ * Classe DraableGraph
+ */
 public class DrawableGraph extends View implements View.OnLongClickListener {
 	private Paint backgroundPaint;
     private Event e;
@@ -26,6 +33,11 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
     private AttributeSet attrs;
     private int mode = -1;
 
+    /**
+     * Constructeur
+     * @param c
+     * @param attrs
+     */
 	public DrawableGraph(Context c, AttributeSet attrs) {
 		super(c, attrs);
 		context = c;

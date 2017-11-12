@@ -5,7 +5,7 @@ import android.graphics.Path;
 import java.util.ArrayList;
 
 /**
- * Created by fblay on 04/10/2017.
+ *  @author Florian Blay & Lucile Floc
  */
 
 public class ArcList {

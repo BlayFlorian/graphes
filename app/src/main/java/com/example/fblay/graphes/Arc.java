@@ -11,7 +11,7 @@ import android.util.FloatProperty;
 import android.util.Log;
 
 /**
- * Created by fblay on 04/10/2017.
+ *  @author Florian Blay & Lucile Floc
  */
 
 public class Arc {
@@ -103,12 +103,13 @@ public class Arc {
      * @param x
      * @param y
      */
-    private void setRectF(float x, float y) {
+    private void setRectFMiddle(float x, float y) {
         this.rectPaint = new Paint();
         this.rectPaint.setColor(Color.WHITE);
         this.rectPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.rectPaint.setAntiAlias(true);
         this.rectF = new RectF(x + 10, y + 10, x-10, y -10);
+
     }
 
     /**
@@ -168,7 +169,7 @@ public class Arc {
         path.moveTo(from.getX(), from.getY());
         path.quadTo(millieu[0], millieu[1], to.getX() , to.getY());
         //getMiddleArc();
-        setRectF(millieu[0], millieu[1]);
+        setRectFMiddle(millieu[0], millieu[1]);
         float [] toBorder = getBorder(50);
         float [] fromBorder = getBorder(300);
         drawArrow(fromBorder[0], fromBorder[1], toBorder[0], toBorder[1]);
@@ -196,7 +197,7 @@ public class Arc {
         //path.quadTo(x, y, to.getX(), to.getY());
         getMiddleArc();
         //path.moveTo(position[0], position[1]);
-        setRectF(millieu[0], millieu[1]);
+        setRectFMiddle(millieu[0], millieu[1]);
         float [] toBorder = getBorder(50);
         float [] fromBorder = getBorder(200);
         drawArrow(fromBorder[0], fromBorder[1], toBorder[0], toBorder[1]);
@@ -288,10 +289,14 @@ public class Arc {
         mPaint.setStrokeWidth(i);
     }
 
-    public void setText(String t){
-
+    /**
+     * Texte de l'étiquette de l'arc
+     * @param t: le texte
+     */
+    public void setTextArc(String t){
+        this.text = t;
     }
-    public void setWidthText(int i){
+    public void setWidthTextArc(int i){
 
     }
 }

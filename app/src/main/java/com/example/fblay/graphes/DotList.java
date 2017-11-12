@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by fblay on 03/10/2017.
+ * @author Florian Blay & Lucile Floc
  */
 
+/**
+ * Classe DotList, liste des noeuds
+ */
 public class DotList {
     ArrayList<Dot> l;
     ArrayList<Dot> restart;
@@ -22,6 +25,11 @@ public class DotList {
         l = new ArrayList<Dot>();
     }
 
+    /**
+     * Constructeur de la classe DotList
+     * @param context
+     * @param attrs
+     */
     public DotList (Context context, AttributeSet attrs){
         this.context = context;
         this.attrs = attrs;
@@ -37,15 +45,21 @@ public class DotList {
             d.setX((xMax / 3) * (i % 3) + 200);
             if(i%3 == 0) { y ++; }
             d.setY((350 * y) + 50);
-            d.setText(String.valueOf(l.size()));
+            d.setTextPoint(String.valueOf(l.size()));
             l.add(d);
         }
     }
-    
+
+    /**
+     * @return la taille du noeud
+     */
     public int getSize() {
         return l.size();
     }
 
+    /**
+     * @return la liste de noeuds
+     */
     public ArrayList<Dot> getDotList() {
         return l;
     }
@@ -58,11 +72,18 @@ public class DotList {
         return l.get(index);
     }
 
+    /**
+     * Ajoute le noeud dans la liste
+     * @param d
+     */
     public void putDot(Dot d) {
         l.add(d);
     }
 
-    // DotList contient ce Dot
+    /**
+     * @param dot
+     * @return true si le noeud est dans la liste, false sinon
+     */
     public boolean contain(Dot dot){
         for(int i = 0; i < l.size(); i++) {
             if (l.get(i).equals(dot)){
@@ -72,7 +93,10 @@ public class DotList {
         return false;
     }
 
-    // list de noeud connecté a ce noeud
+    /**
+     * @param dot le noeud
+     * @return liste de noeud connecté a ce noeud par rapport aux arcs
+     */
     public DotList containsDot(Dot dot) {
         DotList dl = new DotList();
         for(int i = 0; i < l.size(); i++) {
@@ -89,6 +113,12 @@ public class DotList {
         return dl;
     }
 
+    /**
+     * Cherche le noeud avec les coordonnées
+     * @param x abscisse
+     * @param y ordonnée
+     * @return index du noeud
+     */
     public int searchDot(float x, float y) {
         for(int i = 0; i < l.size(); i++ ) {
             float maxX = l.get(i).getX() + l.get(i).getRadius();
@@ -102,6 +132,12 @@ public class DotList {
         return -1;
     }
 
+    /**
+     * Cherche le milieu de l'arc
+     * @param x abscisse
+     * @param y ordonnée
+     * @return tableau des milieux
+     */
     public int[] searchMiddle(float x, float y) {
         for (int i = 0; i < l.size(); i++) {
             int res = l.get(i).getArcList().getMiddle(x,y);
@@ -112,7 +148,10 @@ public class DotList {
         return new int[]{-1,-1};
     }
 
-
+    /**
+     * Supprime un noeud
+     * @param index index du noeud
+     */
     public void supDot(int index){
         DotList d = containsDot(l.get(index));
         for(int i = 0; i < d.getSize(); i++) {

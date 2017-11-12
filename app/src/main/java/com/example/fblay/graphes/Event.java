@@ -16,9 +16,12 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 
 /**
- * Created by fblay on 13/10/2017.
+ *  @author Florian Blay & Lucile Floc
  */
 
+/**
+ * Classe Event
+ */
 public class Event {
     private float eventX, eventY, startX, startY;
     private int nodeIndex;
@@ -29,6 +32,10 @@ public class Event {
     private DrawableGraph thisDG;
     private ArcList arcList;
 
+    /**
+     * Constructeur de la classe Event
+     * @param thisDG
+     */
     public Event(DrawableGraph thisDG) {
         this.thisDG = thisDG;
         this.context = thisDG.getContext();
@@ -217,7 +224,7 @@ public class Event {
     //====================Actions=========================//
     public void newNode(String text){
         Dot d = new Dot(context,attrs);
-        d.setText(text);
+        d.setTextPoint(text);
         d.setX((int)eventX);
         d.setY((int)eventY);
         dotList.putDot(d);
@@ -225,7 +232,7 @@ public class Event {
     }
 
     public void setTextNode(String text) {
-        dotList.getDot(nodeIndex).setText(text);
+        dotList.getDot(nodeIndex).setTextPoint(text);
         thisDG.invalidate();
     }
 

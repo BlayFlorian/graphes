@@ -1,7 +1,7 @@
 package com.example.fblay.graphes;
 
 /**
- * Created by fblay on 30/09/2017.
+ *  @author Florian Blay & Lucile Floc
  */
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,6 +13,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+/**
+ * Classe Dot, pour les noeuds
+ */
 class Dot extends View {
     private float RADIUS = 50;
     private Paint circle;
@@ -23,6 +26,11 @@ class Dot extends View {
     private int y = 0;
     private String text = "0";
 
+    /**
+     * Constructeur de la classe Dot
+     * @param context
+     * @param attrs
+     */
     public Dot(Context context, AttributeSet attrs) {
         super(context, attrs);
         circle = new Paint();
@@ -54,6 +62,10 @@ class Dot extends View {
         this.y = ny;
     }
 
+    /**
+     * Change la couleur du noeud
+     * @param c: index du noeud
+     */
     public void setColor(int c) {
         switch (c) {
             case 0: circle.setColor(Color.RED);
@@ -91,7 +103,11 @@ class Dot extends View {
         RADIUS = i;
     }
 
-    public void setText(String t) {
+    /**
+     * Change le texte du noeud
+     * @param t: le nouveau texte
+     */
+    public void setTextPoint(String t) {
         this.text = t;
     }
 
