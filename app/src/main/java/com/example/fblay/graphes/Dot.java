@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +18,7 @@ import android.view.View;
 /**
  * Classe Dot, pour les noeuds
  */
-class Dot extends View {
+class Dot implements Parcelable {
     private float RADIUS = 50;
     private Paint circle;
     private Paint textPaint;
@@ -25,14 +27,13 @@ class Dot extends View {
     private int x = 0;
     private int y = 0;
     private String text = "0";
+    private DrawableGraph dg;
 
     /**
      * Constructeur de la classe Dot
-     * @param context
-     * @param attrs
      */
-    public Dot(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public Dot(DrawableGraph dg) {
+        this.dg = dg;
         circle = new Paint();
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
@@ -45,13 +46,21 @@ class Dot extends View {
         arcList = new ArcList();
     }
 
+    protected Dot(Parcel in) {
+        RADIUS = in.readFloat();
+        rectF = in.readParcelable(RectF.class.getClassLoader());
+        x = in.readInt();
+        y = in.readInt();
+        text = in.readString();
+    }
+
     public void Draw(Canvas canvas) {
         String t = String.valueOf(text);
         int size = t.length();
         rectF.set(x + RADIUS + (size - 1) * 10, y + RADIUS, x - RADIUS - (size - 1) * 10, y-RADIUS);
         canvas.drawOval(rectF, circle);
         canvas.drawText(t, x, y, textPaint);
-        invalidate();
+        dg.invalidate();
     }
 
     public void setX (int nx) {
@@ -115,4 +124,33 @@ class Dot extends View {
         return this.text;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeFloat(RADIUS);
+        dest.writeParcelable(rectF, flags);
+        dest.writeInt(x);
+        dest.writeInt(y);
+        dest.writeString(text);
+    }
+
+    public static final Parcelable.Creator<Dot> CREATOR = new Parcelable.Creator<Dot>()
+    {
+        @Override
+        public Dot createFromParcel(Parcel source)
+        {
+            return new Dot(source);
+        }
+
+        @Override
+        public Dot[] newArray(int size)
+        {
+            return new Dot[size];
+        }
+    };
 }

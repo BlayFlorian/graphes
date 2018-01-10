@@ -1,6 +1,8 @@
 package com.example.fblay.graphes;
 
 import android.graphics.Path;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
 
@@ -8,7 +10,7 @@ import java.util.ArrayList;
  *  @author Florian Blay & Lucile Floc
  */
 
-public class ArcList {
+public class ArcList implements Parcelable {
 
 
     ArrayList<Arc> arrayArc ;
@@ -20,6 +22,21 @@ public class ArcList {
         arrayArc = new ArrayList<Arc>();
         arrayArc.add(new Arc());
     }
+
+    protected ArcList(Parcel in) {
+    }
+
+    public static final Creator<ArcList> CREATOR = new Creator<ArcList>() {
+        @Override
+        public ArcList createFromParcel(Parcel in) {
+            return new ArcList(in);
+        }
+
+        @Override
+        public ArcList[] newArray(int size) {
+            return new ArcList[size];
+        }
+    };
 
     /**
      * @return la taille du tableau contenant les arcs. Soit le nombre d'arc
@@ -78,4 +95,12 @@ public class ArcList {
         arrayArc.remove(index);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+    }
 }

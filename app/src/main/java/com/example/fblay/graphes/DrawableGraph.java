@@ -1,18 +1,15 @@
 package com.example.fblay.graphes;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v7.app.AlertDialog;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 
@@ -44,12 +41,34 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 		this.attrs = attrs;
         setLongClickable(true);
         setOnLongClickListener(this);
-        dotList = new DotList(context, attrs);
+        this.dotList = new DotList(this);
         e = new Event(this);
 		backgroundPaint = new Paint();
 		backgroundPaint.setColor(Color.CYAN);
 	}
 
+    @Override
+    public Parcelable onSaveInstanceState()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("superState", super.onSaveInstanceState());
+        bundle.putParcelable("event", this.e); // ... save stuff
+        bundle.putParcelable("dotList", this.dotList);
+        return bundle;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state)
+    {
+        if (state instanceof Bundle) // implicit null check
+        {
+            Bundle bundle = (Bundle) state;
+            this.e = bundle.getParcelable("event");
+            this.dotList = bundle.getParcelable("dotList");
+            state = bundle.getParcelable("superState");
+        }
+        super.onRestoreInstanceState(state);
+    }
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
@@ -74,6 +93,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
 
     @Override
 	public boolean onTouchEvent(MotionEvent event) {
+
 		e.setEvent(event.getX(), event.getY());
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
@@ -116,7 +136,7 @@ public class DrawableGraph extends View implements View.OnLongClickListener {
     }
 
     public DotList getDotList() {
-        return this.dotList;
+	    return this.dotList;
     }
 
     public int getMode() {

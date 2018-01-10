@@ -6,6 +6,8 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Path;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -22,7 +24,7 @@ import android.widget.NumberPicker;
 /**
  * Classe Event
  */
-public class Event {
+public class Event implements Parcelable {
     private float eventX, eventY, startX, startY;
     private int nodeIndex;
     private int[] middle;
@@ -45,6 +47,29 @@ public class Event {
         this.eventX = 0;
         this.eventY = 0;
     }
+
+    protected Event(Parcel in) {
+        eventX = in.readFloat();
+        eventY = in.readFloat();
+        startX = in.readFloat();
+        startY = in.readFloat();
+        nodeIndex = in.readInt();
+        middle = in.createIntArray();
+        dotList = in.readParcelable(DotList.class.getClassLoader());
+        res = in.readInt();
+    }
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 
     public void setEvent(float x, float y) {
         this.eventX = x;
@@ -231,7 +256,7 @@ public class Event {
 
     //====================Actions=========================//
     public void newNode(String text){
-        Dot d = new Dot(context,attrs);
+        Dot d = new Dot(thisDG);
         d.setTextPoint(text);
         d.setX((int)eventX);
         d.setY((int)eventY);
@@ -290,5 +315,22 @@ public class Event {
     private void supArc() {
         dotList.getDot(middle[0]).getArcList().deleteArc(middle[1]);
         thisDG.invalidate();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeFloat(eventX);
+        dest.writeFloat(eventY);
+        dest.writeFloat(startX);
+        dest.writeFloat(startY);
+        dest.writeInt(nodeIndex);
+        dest.writeIntArray(middle);
+        dest.writeParcelable(dotList, flags);
+        dest.writeInt(res);
     }
 }

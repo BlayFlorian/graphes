@@ -1,6 +1,8 @@
 package com.example.fblay.graphes;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,11 +17,12 @@ import java.util.List;
 /**
  * Classe DotList, liste des noeuds
  */
-public class DotList {
+public class DotList implements Parcelable {
     ArrayList<Dot> l;
     ArrayList<Dot> restart;
     Context context;
     AttributeSet attrs;
+    DrawableGraph dg;
 
     public DotList() {
         l = new ArrayList<Dot>();
@@ -27,21 +30,37 @@ public class DotList {
 
     /**
      * Constructeur de la classe DotList
-     * @param context
-     * @param attrs
      */
-    public DotList (Context context, AttributeSet attrs){
-        this.context = context;
-        this.attrs = attrs;
+    public DotList (DrawableGraph dg){
+        this.context = dg.getContext();
+        this.attrs = dg.getAttrs();
+        this.dg = dg;
         init();
     }
+
+    protected DotList(Parcel in) {
+        l = in.createTypedArrayList(Dot.CREATOR);
+        restart = in.createTypedArrayList(Dot.CREATOR);
+    }
+
+    public static final Creator<DotList> CREATOR = new Creator<DotList>() {
+        @Override
+        public DotList createFromParcel(Parcel in) {
+            return new DotList(in);
+        }
+
+        @Override
+        public DotList[] newArray(int size) {
+            return new DotList[size];
+        }
+    };
 
     private void init() {
         int xMax = 1024;
         l = new ArrayList<Dot>();
         int y = 0;
         for (int i = 0; i < 9; i++) {
-            Dot d = new Dot(context, attrs);
+            Dot d = new Dot(dg);
             d.setX((xMax / 3) * (i % 3) + 200);
             if(i%3 == 0) { y ++; }
             d.setY((350 * y) + 50);
@@ -163,6 +182,17 @@ public class DotList {
             }
         }
         l.remove(index);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(l);
+        dest.writeTypedList(restart);
     }
 
 }

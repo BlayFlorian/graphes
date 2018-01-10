@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.RectF;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.FloatProperty;
 import android.util.Log;
 
@@ -14,7 +16,7 @@ import android.util.Log;
  *  @author Florian Blay & Lucile Floc
  */
 
-public class Arc {
+public class Arc implements Parcelable {
     /**
      * to: point d'arrivé de l'arc
      * from: point de départ de l'arc
@@ -64,6 +66,27 @@ public class Arc {
         textPaint.setAntiAlias(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
     }
+
+    protected Arc(Parcel in) {
+        from = in.readParcelable(Dot.class.getClassLoader());
+        to = in.readParcelable(Dot.class.getClassLoader());
+        millieu = in.createFloatArray();
+        rectF = in.readParcelable(RectF.class.getClassLoader());
+        text = in.readString();
+        size = in.readInt();
+    }
+
+    public static final Creator<Arc> CREATOR = new Creator<Arc>() {
+        @Override
+        public Arc createFromParcel(Parcel in) {
+            return new Arc(in);
+        }
+
+        @Override
+        public Arc[] newArray(int size) {
+            return new Arc[size];
+        }
+    };
 
     /**
      * Création de l'arc
@@ -307,5 +330,20 @@ public class Arc {
     }
     public void setWidthTextArc(int i){
         this.size = i;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(from, flags);
+        dest.writeParcelable(to, flags);
+        dest.writeFloatArray(millieu);
+        dest.writeParcelable(rectF, flags);
+        dest.writeString(text);
+        dest.writeInt(size);
     }
 }
